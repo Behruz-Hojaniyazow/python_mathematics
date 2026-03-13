@@ -11,4 +11,4 @@ wealthy_w = {}
 for name, salary in workers.items():
   if salary > 1000:
     wealthy_w[name] = salary
-print(f"Wealthy workers {wealthy_w")
+print(f"Wealthy workers {wealthy_w}")
