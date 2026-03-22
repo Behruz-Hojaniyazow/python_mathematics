@@ -15,7 +15,7 @@ I am currently covering all fundamental and intermediate Python topics, includin
 
 ## 📊 Repository Statistics
 * **Current Status:** Active Learning 📈
-* **Total Lessons/Scripts:** 15+ specialized Python files
+* **Total Lessons/Scripts:** 60+ specialized Python files
 * **Language:** Python 3.x
 * **Goal:** Building a solid foundation for future Engineering studies.
 
