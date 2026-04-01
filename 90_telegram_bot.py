@@ -7,7 +7,6 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import FSInputFile
 from aiogram.filters import CommandStart
 
-# TOKEN Railway Variables'dan olinadi
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 bot = Bot(token=BOT_TOKEN)
@@ -18,47 +17,47 @@ logging.basicConfig(level=logging.INFO)
 
 @dp.message(CommandStart())
 async def start_handler(message: types.Message):
-    await message.answer("👋 Salom!\nLink yubor (YouTube / TikTok / Instagram)\nMen video yuklab beraman 🎬")
+    await message.answer("👋 Salom!\nLink yubor (TikTok / Instagram / YouTube)\nMen video yoki rasmni yuklab beraman 🚀")
 
 
 @dp.message()
-async def download_video(message: types.Message):
-    url = message.text
-
-    if not url or "http" not in url:
-        await message.answer("❌ Iltimos link yubor!")
-        return
+async def download_handler(message: types.Message):
+    url = message.text.strip()
 
     await message.answer("⏳ Yuklanmoqda...")
 
     try:
         ydl_opts = {
-            'outtmpl': 'video.%(ext)s',
+            'outtmpl': 'downloads/%(title)s.%(ext)s',
             'format': 'best',
             'quiet': True,
             'noplaylist': True
         }
 
+        os.makedirs("downloads", exist_ok=True)
+
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+            info = ydl.extract_info(url, download=True)
 
-        file_name = None
-        for file in os.listdir():
-            if file.startswith("video."):
-                file_name = file
-                break
+            # FILE NAME olish
+            filename = ydl.prepare_filename(info)
 
-        if not file_name:
-            await message.answer("❌ Video topilmadi!")
-            return
+        # 🔥 FILE TYPE aniqlash
+        if filename.endswith(".mp4") or filename.endswith(".mkv"):
+            await message.answer_video(video=FSInputFile(filename))
 
-        video = FSInputFile(file_name)
-        await message.answer_video(video)
+        elif filename.endswith(".jpg") or filename.endswith(".png") or filename.endswith(".jpeg"):
+            await message.answer_photo(photo=FSInputFile(filename))
 
-        os.remove(file_name)
+        else:
+            # boshqa formatlar (masalan audio yoki unknown)
+            await message.answer_document(document=FSInputFile(filename))
+
+        # 🧹 Faylni o‘chirish (server to‘lib ketmasin)
+        os.remove(filename)
 
     except Exception as e:
-        await message.answer(f"❌ Xatolik: {e}")
+        await message.answer(f"❌ Xatolik:\n{e}")
 
 
 async def main():
