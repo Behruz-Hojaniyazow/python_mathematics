@@ -2,6 +2,7 @@ import asyncio
 import logging
 import yt_dlp
 import os
+import requests
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import FSInputFile
@@ -15,18 +16,47 @@ dp = Dispatcher()
 logging.basicConfig(level=logging.INFO)
 
 
+# 📥 IMAGE DOWNLOAD
+def download_image(url, filename):
+    r = requests.get(url)
+    with open(filename, "wb") as f:
+        f.write(r.content)
+
+
 @dp.message(CommandStart())
 async def start_handler(message: types.Message):
-    await message.answer("👋 Salom!\nLink yubor (TikTok / Instagram / YouTube)\nMen video yoki rasmni yuklab beraman 🚀")
+    await message.answer("👋 Salom!\nTikTok link yubor\nMen video yoki rasmlarni yuklab beraman 🚀")
 
 
 @dp.message()
 async def download_handler(message: types.Message):
     url = message.text.strip()
 
+    if "tiktok.com" not in url:
+        await message.answer("❌ Hozir faqat TikTok ishlaydi")
+        return
+
     await message.answer("⏳ Yuklanmoqda...")
 
     try:
+        os.makedirs("downloads", exist_ok=True)
+
+        # 🔥 1. TikTok API orqali rasm tekshiramiz
+        api = f"https://www.tikwm.com/api/?url={url}"
+        res = requests.get(api).json()
+
+        images = res.get("data", {}).get("images", [])
+
+        # 📸 AGAR PHOTO BO‘LSA
+        if images:
+            for i, img in enumerate(images):
+                filename = f"downloads/photo_{i}.jpg"
+                download_image(img, filename)
+                await message.answer_photo(photo=FSInputFile(filename))
+                os.remove(filename)
+            return
+
+        # 🎥 AGAR VIDEO BO‘LSA (yt-dlp)
         ydl_opts = {
             'outtmpl': 'downloads/%(title)s.%(ext)s',
             'format': 'best',
@@ -34,26 +64,11 @@ async def download_handler(message: types.Message):
             'noplaylist': True
         }
 
-        os.makedirs("downloads", exist_ok=True)
-
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
-
-            # FILE NAME olish
             filename = ydl.prepare_filename(info)
 
-        # 🔥 FILE TYPE aniqlash
-        if filename.endswith(".mp4") or filename.endswith(".mkv"):
-            await message.answer_video(video=FSInputFile(filename))
-
-        elif filename.endswith(".jpg") or filename.endswith(".png") or filename.endswith(".jpeg"):
-            await message.answer_photo(photo=FSInputFile(filename))
-
-        else:
-            # boshqa formatlar (masalan audio yoki unknown)
-            await message.answer_document(document=FSInputFile(filename))
-
-        # 🧹 Faylni o‘chirish (server to‘lib ketmasin)
+        await message.answer_video(video=FSInputFile(filename))
         os.remove(filename)
 
     except Exception as e:
