@@ -11,5 +11,8 @@ def uppercase_and_lowercase_letters(word):
   return upper_letters, lower_letters
 text = input("Enter text: ")
 uppers, lowers = uppercase_and_lowercase_letters(text)
+print("=" * 30)
 print(f"Uppercase letters: {uppers}")
+print("-" * 30)
 print(f"Lowercase letters: {lowers}")
+print("=" * 30)
