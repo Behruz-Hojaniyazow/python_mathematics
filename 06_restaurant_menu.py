@@ -28,5 +28,6 @@ for i in range(1,4):
     total_price += restaurant_menu[query]
   else:
     print(f"Sorry we don't have {query} in our menu")
+print("=" * 30)
 print(f"Your orders: {', '.join(orders)}")
 print(f"Total cost {total_price}")
