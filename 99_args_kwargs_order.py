@@ -1,43 +1,34 @@
-def get_number(prompt):
-  """a function that accepts only integers from the user"""
-  while True:
-    try:
-      return int(input(prompt))
-    except ValueError:
-      print("Please enter only integers, try again")
-def infos(age, *args, **kwargs):
+def infos(name, *args, **kwargs):
   """a function that shows you how to order args and kwargs"""
-  if not infos:
-    return []
-  user_info = []
-  age = get_number("Enter your age: ")
-  user_info.append(age)
-  additionals = []
-  while True:
-    print("type 'stop' to finish")
-    additional = input("What is your hobbies: ").title()
-    if additional == 'Stop':
-      break
-    additionals.append(additional)
-  future_plans = {}
-  while True:
-    print("type 'stop' to finish")
-    plan = input("What is your future plans?").title()
-    if plan == 'Stop':
-      break
-    value = get_number("How much money can you earn? ")
-    future_plans[plan] = value
-  return user_info, additionals, future_plans
-def main():
-  age_info = infos(user_info)
-  hobbies = infos(additionals)
-  plans = infos(future_plans)
-  print("=" * 30)
-  print("Here is the information of the user")
-  print("="  * 30)
-  print(f"Your are {age_info} years old")
-  print(f"Additional infos: {hobbies}")
-  for key, value in plans.items():
-    print(f"{key} | {value}")
-if __name__ == "__main__":
-  main()
+  print(f"\n===== REPORT: {name.upper()}=====")
+  if args:
+    print("Informations that you entered as an (*args):")
+    for i, value in enumerate(args, 1):
+      print(f"  - {i} {value}")
+  if kwargs:
+    print("\nInformations that you entered as a (**kwargs):")
+    for key, value in kwargs.items():
+      print(f"  ~ {key.capitalize()} - {value.title()}")
+#1majburiy ism
+user_name = input("Enter your name: ").title()
+#2adding infos for args as a list
+user_args = []
+print("\n---Optional Information---")
+while True:
+  print("type 'stop' to finish")
+  extra = input("Enter an additional information: ").title()
+  if extra == 'Stop':
+    break
+  user_args.append(extra)
+#3adding infos for kwargs as a dict
+user_kwargs = {}
+print("\n---Informations with keys, for example (city - newyork)---")
+while True:
+  print("type 'stop' to finish")
+  key = input("Type of information? ")
+  if key.lower() == 'stop':
+    break
+  value = input(f"Enter the value of {key}: ")
+  user_kwargs[key] = value
+#funksiyani chaqirish (MAIN PART)
+infos(user_name, *user_args, **user_kwargs)
