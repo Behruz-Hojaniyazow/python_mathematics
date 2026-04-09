@@ -10,16 +10,15 @@ def analyze_stats(**kwargs):
   if not kwargs:
     return "No information entered"
   max_score = max(kwargs.values())
-  top_subject = max(kwargs, key=kwargs.get)
   min_score = min(kwargs.values())
-  min_subject = min(kwargs, key=kwargs.get)
+  top_subjects = [sub.capitalize() for sub, score in kwargs.items() if score == max_score]
+  min_subjects = [sub.capitalize() for sub, score in kwargs.items() if score == min_score]
   average_score = sum(kwargs.values()) / len(kwargs)
-  report = {
-          "highest" : (top_subject, max_score),
-          "lowest" : (min_subject, min_score),
+  return {
+          "highest" : (top_subjects, max_score),
+          "lowest" : (min_subjects, min_score),
           "average" : average_score
   }
-  return report
 def main():
   subject_infos = {}
   user_name = input("Enter your name: ")
@@ -33,14 +32,17 @@ def main():
     subject_infos[key] = value
   if subject_infos:
     result = analyze_stats(**subject_infos)
-    print("\n---These are your subject info---")
     print("\n" + "~" * 30)
-    for key, value in result.items():
-      if isinstance(value, tuple):
-        name, score = value
-        print(f" -  {key.capitalize()}: {name} {score:.1f}")
-      elif isinstance(value, (float, int)):
-        print(f" -  {key.capitalize()}: {value:.1f}")
+    print(f"---Subject info about {user_name.title()}---")
+    print("-" * 30)
+    #the highest scores
+    subjects, score = result['highest']
+    print(f"- The highest score is ({score}): {', '.join(subjects)}")
+    #the lowest score
+    subjects, score = result['lowest']
+    print(f"- The lowest score is ({score}): {', '.join(subjects)}")
+    #average score
+    print(f"- Average score: {result['average']:.1f}")
     print("\n" + "~" * 30)
   else:
     print("No info entered")
