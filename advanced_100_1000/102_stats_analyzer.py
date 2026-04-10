@@ -19,6 +19,20 @@ def analyze_stats(**kwargs):
           "lowest" : (min_subjects, min_score),
           "average" : average_score
   }
+def save_report(report, name):
+  """a function that writes the answers to the 'stats_report.txt' file"""
+  filename = "stats_report.txt"
+  with open (filename, "w", encoding="utf-8") as file:
+    file.write(f"===Info About {name.title()}===\n\n")
+    #the highest scores
+    subjects, score = report['highest']
+    file.write(f"The highest score is ({score}): {', '.join(subjects)}\n")
+    #the lowest score
+    subjects, score = report['lowest']
+    file.write(f"The lowest score is ({score}): {', '.join(subjects)}\n")
+    #average score
+    file.write(f"Average score is ({report['average']:.1f})\n")
+    file.write("Created by the Project")
 def main():
   subject_infos = {}
   user_name = input("Enter your name: ")
@@ -42,8 +56,11 @@ def main():
     subjects, score = result['lowest']
     print(f"- The lowest score is ({score}): {', '.join(subjects)}")
     #average score
-    print(f"- Average score: {result['average']:.1f}")
+    print(f"- Average score: ({result['average']:.1f})")
     print("\n" + "~" * 30)
+    save_report(result, user_name)
+    print("\n(!) Results were added to the 'stats_report.txt' file.")
+    print("-" * 30)
   else:
     print("No info entered")
 if __name__ == "__main__":
