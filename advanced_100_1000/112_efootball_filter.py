@@ -14,7 +14,7 @@ def get_best_players():
     r_players = [player for player in player_list if player.lower().startswith('r')]
     if r_players:
       print("\n(!)These are the football GOATs")
-      filename = "goats.txt"
+      filename = "football_goats.txt"
       try:
         with open(filename, 'a', encoding = 'utf-8') as file:
           for player in r_players:
