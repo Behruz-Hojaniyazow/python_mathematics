@@ -6,7 +6,7 @@ workers = {
            "scott" : 950,
            "kendy" : 1100
 }
-#we are gonna add the workers into another (dictionary) who earns more then 1000
+#we are gonna add the workers into another (dictionary) who earns more than 1000
 wealthy_w = {}
 for name, salary in workers.items():
   if salary > 1000:
