@@ -13,7 +13,7 @@ def multification():
   number = get_numbers("What number multification table do you need? ")
   try:
     with open(filename, 'a', encoding = 'utf-8') as f:
-      f.write(f"That is the multification table for {number} number\n\n")
+      f.write(f"That is the multification table for number {number}\n\n")
       
       for i in range(1, 11):
         result = number * i
