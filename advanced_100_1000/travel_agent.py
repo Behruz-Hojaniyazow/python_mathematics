@@ -1,7 +1,7 @@
 import travel_choice as tc
 
 def main():
-  print("\n--- Kryos Global Travle Agent ---")
+  print("\n--- 🌍 Kryos Global Travle Agent ---")
   destinations = []
   for i in range(5):
     place = input(f"{i+1} Enter travel direction").strip().title()
