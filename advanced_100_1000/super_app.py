@@ -1,5 +1,6 @@
 import geometry_2 as geo
 import lucky_number as ln
+import travel_agent as ta
 import sys
 
 def exit_app():
@@ -12,7 +13,8 @@ def start_menu():
   menu_actions = {
     '1' : geo.main,
     '2' : ln.find_ai_num,
-    '3' : exit_app
+    '3' : ta.main,
+    '4' : exit_app
   }
   
   while True:
@@ -21,7 +23,8 @@ def start_menu():
     print("=" * 40)
     print("1. Use geometry tools")
     print("2. Start lucky number game")
-    print("3. Stop the project")
+    print("3. Travel around the World")
+    print("4. Stop the project")
     print("-" * 40)
     
     choice = input("Choose an action: ")
