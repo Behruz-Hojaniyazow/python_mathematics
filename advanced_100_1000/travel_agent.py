@@ -13,7 +13,7 @@ def main():
   if destinations:
     chosen_one = tc.get_random_destination(destinations)
     sorted_list = tc.get_sorted_destinations(destinations)
-    print("\n" + * 40)
+    print("\n" + "=" * 40)
     print(f"✈️ Recommended destination for you is: {chosen_one}")
     print(f"📍 All directions (sorted): {', '.join(sorted_list)}")
     print("=" * 40)
