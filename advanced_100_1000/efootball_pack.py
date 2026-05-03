@@ -59,9 +59,10 @@ def pack_opening():
   print("Type 'stop' to exit")
   
   # 🔹️ EPIC counter (global nazarot)
-  total_epics_collected = []
+  total_epics_collected = set()
   
   while True:
+    # STOP Agar hamma epic olingan bolsa
     if len(total_epics_collected) == 3:
       print("\n🔥You collected ALL EPIC players!")
       print("No need to open more packs ✅️")
@@ -91,12 +92,13 @@ def pack_opening():
       random_players = random.sample(players, 10)
       
       # packdan ochirish
-      players = [player for player in players if player not in random_players]
-      print(f"{len(players)} players left in the pack")
+      for p in random_players:
+        players.remove(p)
+      print(f"\n📦 Remaining players: {len(players)}")
       for player in random_players:
         if player['type'] == 'epic':
           epic_players.append(player)
-          total_epics_collected.append(player)
+          total_epics_collected.add(player['name'])
             
         elif player['type'] == 'highlight':
           highlight_players.append(player)
@@ -133,10 +135,10 @@ def pack_opening():
       
       random_player = random.choice(players)
       players.remove(random_player)
-      print(f"{len(players)} players left in the pack")
+      print(f"\n📦 Remaining players: {len(players)}")
       
       if random_player['type'] == 'epic':
-        total_epics_collected.append(random_player)
+        total_epics_collected.add(random_player['name'])
         print(f"\nEPIC!!! You Got {random_player['name']}")
         
       elif random_player['type'] == 'highlight':
