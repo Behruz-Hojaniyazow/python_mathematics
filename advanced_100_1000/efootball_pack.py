@@ -8,7 +8,20 @@ COST_MULTI = 900
 TOTAL_EPICS = 3
 
 def get_numbers(prompt):
-  """function that only accepts integers"""
+  """
+    Prompt the user for input and ensure that only an integer is accepted.
+
+    This function repeatedly asks the user to enter a value until a valid
+    integer is provided. If the user enters invalid input (e.g., text),
+    an error message is displayed and the user is prompted again.
+
+    Args:
+        prompt (str): The message displayed to the user.
+
+    Returns:
+        int: A valid integer entered by the user.
+  """
+  
   while True:
     try:
       return int(input(prompt))
@@ -19,10 +32,32 @@ def get_numbers(prompt):
 # DATA CREATION
 # ===============
 def build_players(names, ptype):
+  """
+    Create a list of player dictionaries from given names and type.
+
+    Each player is represented as a dictionary with 'name' and 'type'.
+
+    Args:
+        names (list): List of player names.
+        ptype (str): Player type (e.g., 'epic', 'highlight', 'normal').
+
+    Returns:
+        list: List of player dictionaries.
+    """
+    
   return [{'name' : n, 'type' : ptype} for n in names]
   # ️🔹️ players (misol uchun)
   
 def create_players():
+  """
+    Create the full list of players categorized by type.
+
+    Includes EPIC, HIGHLIGHT, and NORMAL players.
+
+    Returns:
+        list: Combined list of all players.
+    """
+    
   players = []
   # 3 ta EPIC 
   epic = ['Cristiano Ronaldo', 'Lionel Messi', 'Neymar']
@@ -68,6 +103,18 @@ def create_players():
   return players
   
 def get_player_type():
+  """
+    Randomly select a player type based on predefined probabilities.
+
+    Probabilities:
+        - EPIC: 5%
+        - HIGHLIGHT: 25%
+        - NORMAL: 70%
+
+    Returns:
+        str: Selected player type.
+    """
+    
   types = ['epic', 'highlight', 'normal']
   weights = [5, 25, 70]
   return random.choices(types, weights=weights)[0]
@@ -76,6 +123,19 @@ def get_player_type():
   # CORE LOGIC
   # ==============
 def pick_player(players):
+  """
+    Select a random player from the list based on weighted type probability.
+
+    Players are first grouped by type, then a type is selected using
+    probability weights, and finally a random player is chosen from that group.
+
+    Args:
+        players (list): Available players.
+
+    Returns:
+        dict: Selected player.
+    """
+    
   # type boyicha ajratamiz
   epic = [p for p in players if p['type'] == 'epic']
   highlight = [p for p in players if p['type'] == 'highlight']
@@ -92,6 +152,16 @@ def pick_player(players):
       return random.choice(normal)
       
 def open_single(players, collected_epics):
+  """
+    Open a single pack (1 player).
+
+    Removes the selected player from the pool and updates EPIC collection.
+
+    Args:
+        players (list): Available players.
+        collected_epics (set): Set of collected EPIC player names.
+    """
+    
   if not players:
     print("⚠️ No players left!")
     return
@@ -112,6 +182,16 @@ def open_single(players, collected_epics):
     print(f"🙂 NORMAL: {p['name']}")
       
 def open_multi(players, collected_epics):
+  """
+    Open a multi-pack (10 players).
+
+    Selects 10 players, removes them from the pool, and categorizes results.
+
+    Args:
+        players (list): Available players.
+        collected_epics (set): Set of collected EPIC player names.
+    """
+    
   if len(players) < 10:
     print("⚠️ Not enough players!")
     return
@@ -155,6 +235,17 @@ def open_multi(players, collected_epics):
 # GAME LOOP
 # ===============
 def run_game():
+  """
+    Main game loop.
+
+    Handles user interaction, coin management, and pack opening logic.
+    The game continues until:
+        - Coins run out
+        - All EPIC players are collected
+        - Player pool becomes empty
+        - User exits manually
+    """
+    
   players = create_players()
   collected_epics = set()
   
