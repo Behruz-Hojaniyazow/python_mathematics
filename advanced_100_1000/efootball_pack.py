@@ -17,16 +17,13 @@ def build_players(names, ptype):
 def create_players():
   players = []
   # 3 ta EPIC 
-  epic_names = ['Cristiano Ronaldo', 'Lionel Messi', 'Neymar']
+  epic = ['Cristiano Ronaldo', 'Lionel Messi', 'Neymar']
     
   # 10 ta HIGHLIGHT 
-  highlight_names = ['Kylian Mbappe', 'Lamine Yamal', 'Jude Bellingham', 'Vinicius Junior', 'Robert Lewandowskiy', 'Pau Cubarsi', 'Federico Valverde', 'Mikel Oyarzabal', 'Alvaro Carreras', 'Eduardo Camavinga']
-  
-  for name in highlight_names:
-    players.append({'name' : name, 'type' : 'highlight'})
+  highlight = ['Kylian Mbappe', 'Lamine Yamal', 'Jude Bellingham', 'Vinicius Junior', 'Robert Lewandowskiy', 'Pau Cubarsi', 'Federico Valverde', 'Mikel Oyarzabal', 'Alvaro Carreras', 'Eduardo Camavinga']
     
   # Qolgan NORMAL (150 yetkazamiz)
-  normal_names = [
+  normal = [
     "Antoine Griezmann", "Jan Oblak", "Rodrigo De Paul", "Julian Alvarez", "Marcos Llorente",
     "Koke", "Jose Maria Gimenez", "Robin Le Normand", "Conor Gallagher", "Alexander Sorloth",
     "Samuel Lino", "Axel Witsel", "Nico Williams", "Inaki Williams", "Oihan Sancet",
@@ -56,113 +53,146 @@ def create_players():
     "Thierry Correia", "Andre Almeida", "Enzo Barrenechea", "Luis Rioja", "Samu Costa",
     "Johan Mojica", "Youssef En Nesyri"
   ]
-  players.extend(build_players(epic)
   
-  # 🔹️ EPIC counter (global nazarot)
-  total_epics_collected = set()
+  players.extend(build_players(epic,('epic'))
+  players.extend(build_players(highlight,('highlight'))
+  players.extend(build_players(normal,('normal'))
+  return players
+  
+def get_player_type():
+  types = ['epic', 'highlight', 'normal']
+  weights = [5, 25, 70]
+  return random.choices(types, weights=weights)[0]
+  
+  # ==============
+  # CORE LOGIC
+  # ==============
+def pick_player(players):
+  # type boyicha ajratamiz
+  epic = [p for p in players if p['type'] == 'epic']
+  highlight = [p for p in players if p['type'] == 'highlight']
+  normal = [p for p in players if p['type'] == 'normal']
   
   while True:
-    # STOP Agar hamma epic olingan bolsa
-    if len(total_epics_collected) == 3:
-      print("\n🔥You collected ALL EPIC players!")
-      print("No need to open more packs ✅️")
-      break
-    if len(players) == 0:
-      print("\n⚠️ Pack is empty")
-      break
-    try:
-      user_coins = float(input("How many coins do you have? "))
-    except ValueError:
-      print("Please enter only numbers, try again")
+    ptype = get_player_type()
+    if ptype == 'epic' and epic:
+      return random.choice(epic)
       
-    if user_coins < 900:
-      print("\nYou don't have enough coins to open 10 players")
+    elif ptype == 'highlight' and highlight:
+      return random.choice(highlight)
+    elif ptype == 'normal' and normal:
+      return random.choice(normal)
       
+  def open_single(players, collected_epics):
+    if not players:
+      print("⚠️ No players left!")
+      return
     
-    choice = input("Choose (100/900): ")
+    p = pick_player(players)
+    players.remove(p)
     
-    if choice.lower() == 'stop':
-      break
+    print(f"\n📦 Remaining players: {len(players)}")
     
-    try:
-      num = float(choice)
-      coin = int(num) if num.is_integer() else num
-    except ValueError:
-      print("Please choose (100/900) actions or type 'stop' to exit")
-    
-    # =================
-    # 🔹️ 900 COIN PACK
-    # =================
-    
-    elif coin == 900:
-      if len(players) < 10:
-        print("⚠️ Not enough players left!")
-        continue
-      
-      epic_players = []
-      highlight_players = []
-      normal_players = []
-      
-      random_players = random.sample(players, 10)
-      
-      # packdan ochirish
-      for p in random_players:
-        players.remove(p)
-      print(f"\n📦 Remaining players: {len(players)}")
-      for player in random_players:
-        if player['type'] == 'epic':
-          epic_players.append(player)
-          total_epics_collected.add(player['name'])
-            
-        elif player['type'] == 'highlight':
-          highlight_players.append(player)
-          
-        else:
-          normal_players.append(player)
-      # 🔥 Animation logic (loopdan tashqarida!)
-      if len(epic_players) >= 2:
-        print(f"\nBLACK ANIMATION!!! {len(epic_players)} EPIC players!")
-      elif len(epic_players) == 1:
-        print(f"\nEpic animation! You got: {epic_players[0] ['name']}")
-      elif len(highlight_players) > 0:
-        print("\n✨️ Highlight Animation!")
-      else:
-        print("\n🙂 Normal Pack")
-      # 🔹️ Natijalar 
-      if epic_players:
-        print("EPIC:", ", ".join(p['name'] for p in epic_players))
-      
-      if highlight_players:
-        print("HIGHLIGHT:", ", ".join(p['name'] for p in highlight_players))
-        
-      if normal_players:
-        print("NORMAL:", ", ".join(p['name'] for p in normal_players))
-        
-    # ==================
-    # 100 COIN PACK
-    # ==================
-        
-    elif choice == 100:
-      if len(players) < 1:
-        print("⚠️ No players left")
-        continue
-      
-      random_player = random.choice(players)
-      players.remove(random_player)
-      print(f"\n📦 Remaining players: {len(players)}")
-      
-      if random_player['type'] == 'epic':
-        total_epics_collected.add(random_player['name'])
-        print(f"\nEPIC!!! You Got {random_player['name']}")
-        
-      elif random_player['type'] == 'highlight':
-        print(f"\n✨️HIGHLIGHT PLAYER!!! You Got {random_player['name']}")
-        
-      else:
-        print(f"\n🙂NORMAL PLAYER: You Got {random_player['name']}")
-        
+    if p['type'] == 'epic':
+      collected_epics.add(p['name'])
+      print(f"🔥 EPIC: {p['name']}")
+    elif p['type'] == 'highlight':
+      print(f"✨️ HIGHLIGHT: {p['name']}")
     else:
-      print("❌️ Invalid Choice!")
-        
+      print(f"🙂 NORMAL: {p['name']}")
+      
+def open_multi(players, collected_epics):
+  if len(players) < 10:
+    print("⚠️ Not enough players!")
+    return
+  
+  pulled = []
+  
+  for _ range(10):
+    p = pick_player(players)
+    players.remove(p)
+    pulled.append(p)
+  
+  print(f"\n📦 Remaining players: {len(players)}")
+  
+  epic, highlight, normal = [], [], []
+  for p in pulled:
+    if p['type'] == 'epic':
+      epic.append(p)
+      collected_epics.add(p['name'])
+    elif p['type'] == 'highlight':
+      highlight.append(p)
+    else:
+      normal.append(p)
+      
+  # animation
+  if len(epic) >= 2:
+    print("🖤 BLACK ANIMATION!")
+  elif len(epic) == 1:
+    print("🔥 EPIC ANIMATION!")
+  elif highlight:
+    print("✨️ HIGHLIGHT ANIMATION!")
+    
+  # result  
+  if epic:
+    print("EPIC:", ", ".join(p['name'] for p in epic))
+  if highlight:
+    print("HIGHLIGHT:", ", ".join(p['name'] for p in highlight))
+  if normal:
+    print("NORMAL:", ", ".join(p['name'] for p in normal))
+    
+# ===============
+# GAME LOOP
+# ===============
+def run_game():
+  players = create_players()
+  collected_epics = set()
+  
+  coins = int(input("💰 Enter your coins: "))
+  
+  while True:
+    print(f"\n💰 Coins: {coins}
+    ")
+    
+    # stop conditions
+    if coins < COST_SINGLE:
+      print("❌️ Not enough coins!")
+      break
+    
+    if len(collected_epics) == TOTAL_EPICS:
+      print("🏆 All EPIC Players Collected!")
+      break
+    
+    if not players:
+      print("⚠️ Pack is empty!")
+      break
+    
+    print("\n1 → 100 coins (1 player)")
+    print("2 → 900 coins (10 players)")
+    print("Type 'stop' to exit")
+    
+    choice = input("Choose an action: ").strip().lower()
+    
+    if choice == 'stop':
+      break
+    
+    elif choice == '1':
+      if coins < COST_SINGLE:
+        print("❌️ Not enough coins!")
+        continue
+      
+      coins -= COST_SINGLE
+      open_single(players, collected_epics)
+      
+    elif choice == '2':
+      if coins < COST_MULTI:
+        print("❌️ Not enough coins!")
+        continue
+      
+      open_multi(players, collected_epics)
+      
+# ===================
+# ENTRY
+# ===================
 if __name__ == '__main__':
-  pack_opening()
+  run_game()
