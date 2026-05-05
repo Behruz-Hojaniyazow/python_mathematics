@@ -7,6 +7,14 @@ COST_SINGLE = 100
 COST_MULTI = 900
 TOTAL_EPICS = 3
 
+def get_numbers(prompt):
+  """function that only accepts integers"""
+  while True:
+    try:
+      return int(input(prompt))
+    except ValueError:
+      print("❌️ Enter your coins in integer format")
+      
 # ===============
 # DATA CREATION
 # ===============
@@ -54,9 +62,9 @@ def create_players():
     "Johan Mojica", "Youssef En Nesyri"
   ]
   
-  players.extend(build_players(epic,('epic'))
-  players.extend(build_players(highlight,('highlight'))
-  players.extend(build_players(normal,('normal'))
+  players.extend(build_players(epic,'epic'))
+  players.extend(build_players(highlight,'highlight'))
+  players.extend(build_players(normal,'normal'))
   return players
   
 def get_player_type():
@@ -83,23 +91,25 @@ def pick_player(players):
     elif ptype == 'normal' and normal:
       return random.choice(normal)
       
-  def open_single(players, collected_epics):
-    if not players:
-      print("⚠️ No players left!")
-      return
+def open_single(players, collected_epics):
+  if not players:
+    print("⚠️ No players left!")
+    return
     
-    p = pick_player(players)
-    players.remove(p)
+  p = pick_player(players)
+  players.remove(p)
     
-    print(f"\n📦 Remaining players: {len(players)}")
+  print(f"\n📦 Remaining players: {len(players)}")
     
-    if p['type'] == 'epic':
-      collected_epics.add(p['name'])
-      print(f"🔥 EPIC: {p['name']}")
-    elif p['type'] == 'highlight':
-      print(f"✨️ HIGHLIGHT: {p['name']}")
-    else:
-      print(f"🙂 NORMAL: {p['name']}")
+  if p['type'] == 'epic':
+    collected_epics.add(p['name'])
+    print(f"🔥 EPIC: {p['name']}")
+    
+  elif p['type'] == 'highlight':
+    print(f"✨️ HIGHLIGHT: {p['name']}")
+    
+  else:
+    print(f"🙂 NORMAL: {p['name']}")
       
 def open_multi(players, collected_epics):
   if len(players) < 10:
@@ -108,7 +118,7 @@ def open_multi(players, collected_epics):
   
   pulled = []
   
-  for _ range(10):
+  for _ in range(10):
     p = pick_player(players)
     players.remove(p)
     pulled.append(p)
@@ -148,11 +158,10 @@ def run_game():
   players = create_players()
   collected_epics = set()
   
-  coins = int(input("💰 Enter your coins: "))
+  coins = get_numbers("\n💰 Enter your coins:  ")
   
   while True:
-    print(f"\n💰 Coins: {coins}
-    ")
+    print(f"\n💰 Coins: {coins}")
     
     # stop conditions
     if coins < COST_SINGLE:
@@ -189,7 +198,11 @@ def run_game():
         print("❌️ Not enough coins!")
         continue
       
+      coins -= COST_MULTI
       open_multi(players, collected_epics)
+      
+    else:
+      print("❌️ Invalid choice!")
       
 # ===================
 # ENTRY
