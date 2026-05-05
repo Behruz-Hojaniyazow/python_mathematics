@@ -1,17 +1,23 @@
 import random
 
-def pack_opening():
+# ================
+# CONSTANTS
+# ================
+COST_SINGLE = 100
+COST_MULTI = 900
+TOTAL_EPICS = 3
+
+# ===============
+# DATA CREATION
+# ===============
+def build_players(names, ptype):
+  return [{'name' : n, 'type' : ptype} for n in names]
   # ️🔹️ players (misol uchun)
   
-  print("\n" + "=" * 35)
-  print("Welcome to eFootball 2026 mobile game")
-  print("=" * 35)
-  
+def create_players():
   players = []
   # 3 ta EPIC 
   epic_names = ['Cristiano Ronaldo', 'Lionel Messi', 'Neymar']
-  for name in epic_names:
-    players.append({'name' : name, 'type' : 'epic'})
     
   # 10 ta HIGHLIGHT 
   highlight_names = ['Kylian Mbappe', 'Lamine Yamal', 'Jude Bellingham', 'Vinicius Junior', 'Robert Lewandowskiy', 'Pau Cubarsi', 'Federico Valverde', 'Mikel Oyarzabal', 'Alvaro Carreras', 'Eduardo Camavinga']
@@ -50,13 +56,7 @@ def pack_opening():
     "Thierry Correia", "Andre Almeida", "Enzo Barrenechea", "Luis Rioja", "Samu Costa",
     "Johan Mojica", "Youssef En Nesyri"
   ]
-  for name in normal_names:
-    players.append({'name' : name, 'type' : 'normal'})
-  
-  print("\n🎮 Welcome to Pack Opening!")  
-  print("100 coins → 1 player")
-  print("900 coins → 10 players")
-  print("Type 'stop' to exit")
+  players.extend(build_players(epic)
   
   # 🔹️ EPIC counter (global nazarot)
   total_epics_collected = set()
@@ -70,17 +70,31 @@ def pack_opening():
     if len(players) == 0:
       print("\n⚠️ Pack is empty")
       break
+    try:
+      user_coins = float(input("How many coins do you have? "))
+    except ValueError:
+      print("Please enter only numbers, try again")
+      
+    if user_coins < 900:
+      print("\nYou don't have enough coins to open 10 players")
+      
     
     choice = input("Choose (100/900): ")
     
     if choice.lower() == 'stop':
       break
     
+    try:
+      num = float(choice)
+      coin = int(num) if num.is_integer() else num
+    except ValueError:
+      print("Please choose (100/900) actions or type 'stop' to exit")
+    
     # =================
     # 🔹️ 900 COIN PACK
     # =================
     
-    elif choice == "900":
+    elif coin == 900:
       if len(players) < 10:
         print("⚠️ Not enough players left!")
         continue
@@ -128,7 +142,7 @@ def pack_opening():
     # 100 COIN PACK
     # ==================
         
-    elif choice == '100':
+    elif choice == 100:
       if len(players) < 1:
         print("⚠️ No players left")
         continue
