@@ -38,17 +38,44 @@ def add_student():
   
 def show_students(info_lists):
   """Outputs name, age, and grades to the console in a nice table format"""
+  if not info_lists:
+    print("(!) Student list is empty")
+    return
   
   print('\n' + '=' * 43)
   print(f"{"Student name":<18} | {"Age":<6} | {"Score":<5}")
   print('-' * 43)
   
-  if info_lists:
-    for student in info_lists:
-      print(f"{student['name'].title():<18} | {student['age']:<6} | {student['score']:<5}")
+  for student in info_lists:
+    print(
+      f"{student['name'].title():<18} | "
+      f"{student['age']:<6} | "
+      f"{student['score']:<5}"
+      )
     print("=" * 43)
     
-  else:
-    print("\n(!) List is empty, Please add students first")
-students = add_student()
-show_students(students)
+def search_students(students):
+  """function that seraches a student from the list"""
+  
+  if not students:
+    print("(!) Student list is empty")
+    return
+  
+  while True:
+    print("Type (stop) to finish")
+    user_input = input("\nEnter the name of the student you are looking for: ").strip()
+    
+    if user_input.lower() == 'stop':
+      print("\nProgram stopped, Thanks!")
+      break
+      
+    found = False
+      
+    for student in students:
+      if student['name'].lower() == user_input.lower():
+        print("\nYes! This student is in the Class Regsiter")
+        print(f"Name {student['name'].title()} | Age {student['age']} | Score {student['score']}")
+        found = True
+        break
+    if not found:
+      print(f"\nUnfortunately! a student named {user_input} is not in Class Register!")
