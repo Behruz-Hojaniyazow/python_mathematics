@@ -64,3 +64,39 @@ def show_contacts(contacts):
       f"{contact['phone']:<6}"
     )
   print("=" * 43)
+  
+def search_contact(contacts):
+  """Function that searches a contact from the list"""
+  
+  # Return early if there are no saved contacts
+  if not contacts:
+    print("\n📂 No Contacts Found")
+    return
+  
+  while True:
+    print("\nType (stop) to stop searching")
+    user_input = input("Enter a contact name that you're looking for: ").strip()
+    
+    # Validate a user name
+    if not user_input:
+      print("\n❌️ Name cannot be empty")
+      continue
+    
+    if user_input.lower() == 'stop':
+      print("\nSearching contact stopped")
+      break
+    
+    found = False
+    
+    for contact in contacts:
+      if contact['name'].lower() == user_input.lower():
+        print("\nYes! This user is in Contact!")
+        print(
+          f"{contact['name'].title()} | "
+          f"{contact['phone']}"
+        )
+        found = True
+        break
+      
+    if not found:
+      print(f"No contacts found named {user_input.title()}")
