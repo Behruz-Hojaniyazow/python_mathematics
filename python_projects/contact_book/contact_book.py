@@ -45,3 +45,22 @@ def add_contact():
     print("✅️\nContact saved successfully!")
   
   return contacts
+  
+def show_contacts(contacts):
+  """Display all saved contacts in a formatted table"""
+  
+  # Return early if there are no saved contacts
+  if not contacts:
+    print("\n📂 No Contacts found!")
+    return
+  
+  # Display All Contacts
+  print('\n' + '=' * 43)
+  print(f'{'Name':<15} | {'Phone Number':<6}')
+  print('-' * 43)
+  for contact in contacts:
+    print(
+      f"{contact['name'].title():<15} | "
+      f"{contact['phone']:<6}"
+    )
+  print("=" * 43)
