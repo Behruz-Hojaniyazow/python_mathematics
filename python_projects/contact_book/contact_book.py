@@ -100,3 +100,48 @@ def search_contact(contacts):
       
     if not found:
       print(f"No contacts found named {user_input.title()}")
+      
+def delete_contact(contacts):
+  """Delete a contact from the contact list"""
+  
+  # Return early if there are no saved contacts
+  if not contacts:
+    print("\n📂 No contacts found to delete!")
+    return
+  
+  while True:
+    print("\nType (stop) to stop deleting")
+    user_input = input("Enter the contact name to delete: ").strip()
+    
+    if not user_input:
+      print("\nName cannot be empty!")
+      continue
+    
+    if user_input.lower() == 'stop':
+      print("\nDeleting contacts stopped")
+      break
+    
+    deleted = False
+    
+    for contact in contacts[:]:
+      if user_input.lower() == contact['name'].lower():
+        
+        while True:
+          confirm = input(f"\nDelete{contact['name'].title()}? ").strip().lower()
+          if confirm in ('yes', 'y') :
+            contacts.remove(contact)
+            print(f"\n{contact['name'].title()} was deleted successfully!")
+            
+            deleted = True
+            return
+        
+          elif confirm in ('no', 'n'):
+            print(f"\n{contact['name'].title()} was not deleted!")
+            
+            return
+        
+          else:
+            print("\nPlease type yez or no!")
+        
+    if not deleted:
+      print(f"No contact found named {user_input.title()}")
