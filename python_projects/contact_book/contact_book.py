@@ -56,12 +56,12 @@ def show_contacts(contacts):
   
   # Display All Contacts
   print('\n' + '=' * 43)
-  print(f'{'Name':<15} | {'Phone Number':<6}')
+  print(f'{'Name':<15} | {'Phone Number':<20}')
   print('-' * 43)
   for contact in contacts:
     print(
       f"{contact['name'].title():<15} | "
-      f"{contact['phone']:<6}"
+      f"{contact['phone']:<20}"
     )
   print("=" * 43)
   
@@ -145,3 +145,34 @@ def delete_contact(contacts):
         
     if not deleted:
       print(f"No contact found named {user_input.title()}")
+      
+def save_contacts(contacts):
+  """Save contacts to a text file"""
+  
+  filename = 'contacts_info.txt'
+  
+  if not contacts:
+    print("📂 Not contacts info found to write!")
+    return
+  
+  try:
+    
+    with open (filename, 'a', encoding = 'utf-8') as f:
+        
+      header = 
+      f"{"Name":<15} | "
+      f"{"Phone Number":<20}\n"
+      f.write(header)
+        
+      for contact in contacts:
+        formatted_contact = 
+        f"{contact['name'].title():<15} | "
+        f"{contact['phone']:<20}\n"
+        f.write(formatted_contact)
+        
+      print("\nContacts Saved to the file successfully! ✅️")
+      
+  except IOError as e:
+    print(f"File error - {e}")
+  except Exception as e:
+    print(f"An error occured - {e}")
