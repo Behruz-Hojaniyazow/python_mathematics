@@ -172,14 +172,9 @@ def save_contacts(contacts):
   try:
     
     with open (filename, 'w', encoding = 'utf-8') as f:
-        
-      header = f"{"Name":<15} | "
-      f"{"Phone Number":<20}\n"
-      f.write(header)
-        
+      
       for contact in contacts:
-        formatted_contact = f"{contact['name'].title():<15} | "
-        f"+{contact['phone']:<20}\n"
+        formatted_contact = f"{contact['name'].title():<15} | {contact['phone']:<20}\n"
         f.write(formatted_contact)
         
       print("\nContacts Saved to the file successfully! ✅️")
