@@ -101,6 +101,38 @@ def search_students(students):
     if not found:
       print(f"\nUnfortunately! a student named {user_input} is not in Class Register!")
       
+def save_students(students):
+  """Function that saves students information into to the file as a txt file"""
+  
+  filename = 'student_info.txt'
+  
+  if not students:
+    print("\nNo student information found to save!")
+    return
+  
+  try:
+    
+    with open(filename, 'w', encoding = 'utf - 8') as f:
+      for student in students:
+        formatted_info = f"{student['name'].title():<15} | "
+        f"{student['age']:<6} | "
+        f"{student['score']:<5}\n"
+        f.write(formatted_info)
+        
+      if len(students) > 1:
+        print(f"\n{len(students)} students information saved successfully!")
+        
+      else:
+        print(f"\n{len(students)} student information saved successfully!")
+  
+  except IOError as e:
+    print(f"\nFile Error - {e}")
+    
+  except Exception as e:
+    print(f"\nUnexpected Error - {e}")
+    
+
+      
 def exit_app():
   """Exit the application gracefully"""
   print("\nThank you for using Kryos Student Manager! GoodBye!")
@@ -114,7 +146,8 @@ def main():
     '1' : 'Add Student',
     '2' : 'Show Student',
     '3' : 'Search Student',
-    '4' : 'Exit App'
+    '4' : 'Save Students to the file',
+    '5' : 'Exit App'
   }
   
   # Main application loop
@@ -139,8 +172,10 @@ def main():
       search_students(students)
       
     elif choice == '4':
-      exit_app()
+      save_students(students)
       
+    elif choice == '5':
+      exit_app()
     else:
       print("\n❌️ Error: Invalid choice, Choose 1 to 4!")
       
