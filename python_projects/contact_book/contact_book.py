@@ -159,7 +159,7 @@ def delete_contact(contacts):
         
     if not deleted:
       print(f"\nNo contact found named {user_input.title()}")
-      
+
 def save_contacts(contacts):
   """Save contacts to a text file"""
   
